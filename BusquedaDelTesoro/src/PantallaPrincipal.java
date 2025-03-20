@@ -1,6 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-//xdxd
+
 public class PantallaPrincipal extends JFrame {
     static final int dimensionesTablero = 7;
     static final int maxJugadores = 4;
