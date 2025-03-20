@@ -23,11 +23,9 @@ public class Temporizador extends Thread{
 
     private void iniciarComponentes() {
         labelsec = new JLabel(limiteSec+"", SwingConstants.CENTER);
-        //labelMins = new JLabel("00", SwingConstants.CENTER);
+
         labelsec.setFont(new Font("Arial", Font.BOLD, 30));
-        //labelMins.setFont(new Font("Arial", Font.BOLD, 40));
-        //panelTemp.add(labelMins);
-        //panelTemp.add(new JLabel(":"));
+
         panelTemp.add(labelsec);
 
     }

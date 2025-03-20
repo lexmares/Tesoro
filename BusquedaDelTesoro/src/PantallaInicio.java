@@ -5,8 +5,8 @@ import java.awt.event.ActionListener;
 
 public class PantallaInicio extends JFrame implements ActionListener {
 
-    int selectionPlayers;
-    String selectionDifficulty;
+    int selectionPlayers = 1;
+    String selectionDifficulty = "Fácil";
     JPanel screen;
     JPanel northPanel;
     JPanel centerPanel;
