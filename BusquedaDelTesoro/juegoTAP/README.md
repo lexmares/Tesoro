@@ -1,2 +1,0 @@
-# juegoTAP
-BusquedaTesoro
