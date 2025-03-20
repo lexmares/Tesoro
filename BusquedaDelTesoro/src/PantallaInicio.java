@@ -1,42 +1,96 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class PantallaInicio extends JFrame {
- JPanel screen;
- JPanel selectPlayers;
- JButton[] players;
- JLabel title;
- public PantallaInicio(){
-     this.setSize(1250, 650);
-     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-     this.setTitle("Búsqueda del Tesoro");
+public class PantallaInicio extends JFrame implements ActionListener {
 
-     screen = new JPanel(new BorderLayout());
-     initComp();
-     this.add(screen);
- }
+    int selectionPlayers;
+    String selectionDifficulty;
+    JPanel screen;
+    JPanel northPanel;
+    JPanel centerPanel;
+    JPanel southPanel;
+    JPanel gameConfig;
+    JComboBox<String> selectionP;
+    JComboBox<String> selectionD;
+    JLabel title;
+    JButton startButton;
 
-         private void initComp(){
-             title = new JLabel("Búsqueda del Tesoro", (int) CENTER_ALIGNMENT);
-             screen.add(title, BorderLayout.NORTH);
+    public PantallaInicio() {
+        this.setSize(1250, 650);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setTitle("Búsqueda del Tesoro");
 
-             selectPlayers = new JPanel(new GridLayout(PantallaPrincipal.maxJugadores,1));
-             genButton(selectPlayers);
-             screen.add(selectPlayers, BorderLayout.SOUTH);
-         }
+        screen = new JPanel(new BorderLayout());
+        initComp();
+        this.add(screen);
+    }
 
-         private void genButton(JPanel selectPlayers){
-             players = new JButton[PantallaPrincipal.maxJugadores];
-             for (int i = 0 ; i<PantallaPrincipal.maxJugadores; i++){
-                 if (i==0){
-                     players[i] = new JButton((i+1) + " jugador");
-                     selectPlayers.add(players[i]);
-                 }else{
-                     players[i] = new JButton((i+1) + " jugadores");
-                     selectPlayers.add(players[i]);
-                 }
-             }
-         }
+    private void initComp() {
+        northPanel = new JPanel();
+        title = new JLabel("Búsqueda del Tesoro", SwingConstants.CENTER);
+        northPanel.add(title);
+
+        centerPanel = new JPanel();
+
+        gameConfig = new JPanel(new GridLayout(2,2,10,10));
+        JLabel players = new JLabel("Jugadores");
+        JLabel difficulty = new JLabel("Dificultad");
+
+        gameConfig.add(players);
+        gameConfig.add(difficulty);
+
+        playerSelection(gameConfig);
+        difficultySelection(gameConfig);
+        centerPanel.add(gameConfig);
+
+        southPanel = new JPanel();
+
+        startButton = new JButton("START");
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startButtonActionPerformed();
+            }
+        });
+
+        southPanel.add(startButton);
+
+        screen.add(northPanel, BorderLayout.NORTH);
+        screen.add(centerPanel, BorderLayout.CENTER);
+        screen.add(southPanel, BorderLayout.SOUTH);
 
 
-}
+    }
+
+    private void startButtonActionPerformed() {
+        dispose();
+        PantallaPrincipal p = new PantallaPrincipal(selectionPlayers, selectionDifficulty);
+        p.setVisible(true);
+
+
+    }
+
+    private void playerSelection(JPanel gameConfig) {
+        String[] options = {"1", "2", "3", "4"};
+        selectionP = new JComboBox<>(options);
+        selectionP.addActionListener(this);
+        gameConfig.add(selectionP);
+    }
+
+    private void difficultySelection(JPanel gameConfig) {
+        String[] options = {"Fácil", "Normal", "Difícil"};
+        selectionD = new JComboBox<>(options);
+        selectionD.addActionListener(this);
+        gameConfig.add(selectionD);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == selectionP) {
+            selectionPlayers = Integer.parseInt((String) selectionP.getSelectedItem());
+        }else
+            selectionDifficulty = (String) selectionD.getSelectedItem();
+    }}
+
