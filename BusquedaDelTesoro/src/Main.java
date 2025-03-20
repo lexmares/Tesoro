@@ -4,7 +4,7 @@ public class Main {
         PantallaPrincipal p = new PantallaPrincipal(1,"Normal");
         p.setVisible(true);
         p.ejecutarTimer();
-
+        
 
     }
 }

@@ -17,7 +17,7 @@ public class Temporizador extends Thread{
     public Temporizador(int limiteSec){
         this.limiteSec = limiteSec;
         panelTemp = new JPanel(new GridLayout(1,1));
-
+        segundos = limiteSec;
         iniciarComponentes();
     }
 
