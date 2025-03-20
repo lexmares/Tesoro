@@ -25,12 +25,19 @@ public class PantallaPrincipal extends JFrame {
     //temporizador
     Temporizador tempo;
 
-    public PantallaPrincipal(){
+    public PantallaPrincipal(int noJugadores, String dificultad){
+
+        tempo = new Temporizador(definirDificultad(dificultad));
+        seleccionJugadores(noJugadores);
+
+
         this.setSize(1250, 650);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Games");
 
         interfazPrincipal = new JPanel(new BorderLayout());
+
+        this.add(interfazPrincipal);
         inicializarComponentes();
     }
 
@@ -43,16 +50,33 @@ public class PantallaPrincipal extends JFrame {
         tablero = new JPanel(new GridLayout(dimensionesTablero, dimensionesTablero));//tablero de 7x7
         //panel para usar los botones
 
+        interfazPrincipal.add(tempo.labelsec, BorderLayout.EAST);
+    }
 
+    public void ejecutarTimer(){
+        tempo.run();
+    }
+
+    public int definirDificultad(String dificultad){
+        switch (dificultad){
+            case "Fácil":
+                return 60;
+            case "Normal":
+                return 30;
+            case "Difícil":
+                return 15;
+            default:
+                return 60;
+        }
     }
 
 
 
     private void seleccionJugadores(int noJugadores){
-        switch (noJugadores){
-
-        }
+        players = new HiloJugador[noJugadores];
     }
+
+
 
     public static void avanceJugador(){
 
