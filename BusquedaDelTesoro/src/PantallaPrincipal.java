@@ -1,3 +1,4 @@
+import javax.print.DocFlavor;
 import javax.swing.*;
 import java.awt.*;
 
@@ -51,6 +52,9 @@ public class PantallaPrincipal extends JFrame {
         //panel para usar los botones
 
         interfazPrincipal.add(tempo.labelsec, BorderLayout.EAST);
+        tablero = new JPanel(new GridLayout(7,7));
+        generarTablero(tablero);
+        interfazPrincipal.add(tablero, BorderLayout.CENTER);
     }
 
     public void ejecutarTimer(){
@@ -83,5 +87,43 @@ public class PantallaPrincipal extends JFrame {
     }
 
 
+    private void generarTablero(JPanel tablero){
 
-}
+        casillas = new JButton[7][7];
+        for (int i=0; i<7; i++){
+            for (int j=0; j<7; j++){
+                JButton casilla= new JButton();
+                casillas[i][j]= casilla;
+
+
+                if (i == 0 || i == 6 || j == 0 || j == 6) {
+                    casillas[i][j].setVisible(true);
+                } else {
+                    casillas[i][j].setVisible(false);
+                }
+
+                tablero.add(casillas[i][j]);
+            }
+            }
+
+        int numCasilla=1;
+        for (int j = 0; j < 7; j++) {
+            casillas[0][j].setText(String.valueOf(numCasilla++));
+        }
+        for (int i = 1; i < 7; i++) {
+            casillas[i][6].setText(String.valueOf(numCasilla++));
+        }
+        for (int j = 5; j >= 0; j--) {
+            casillas[6][j].setText(String.valueOf(numCasilla++));
+        }
+        for (int i = 5; i > 0; i--) {
+            casillas[i][0].setText(String.valueOf(numCasilla++));
+        }
+        }
+
+
+
+
+
+    }
+
