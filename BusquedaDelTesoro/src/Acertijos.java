@@ -2,11 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Acertijos {
-    static final int NO_ACERTIJOS = 39;
+    static final int NO_ACERTIJOS = 32;
+
     int acertijoActual = 0;
     JPanel panelCartas;
     CardLayout cardLayout = new CardLayout();
     JLabel[] acertijosLabels;
+    JLabel predet;
 
     String[] acertijos = {
             "Sin rostro y sin ojos. Sin embargo, lloro cuando me cortan.",
@@ -91,6 +93,12 @@ public class Acertijos {
         panelCartas = new JPanel(cardLayout);
 
         agregarLabelsAlPanel();
+
+        predet = new JLabel("???", SwingConstants.CENTER);
+        panelCartas.add(predet, "predeterminado");
+
+        cardLayout.show(panelCartas, "predeterminado");
+
     }
 
     private void agregarLabelsAlPanel() {
@@ -104,6 +112,12 @@ public class Acertijos {
         return acertijoActual;
     }
 
+    public void mostrarAcertijo(){
+        cardLayout.show(panelCartas, "ac" + solicitarAcertijo());
+    }
+    public void mostrarCaraPredeterminada(){
+        cardLayout.show(panelCartas, "predeterminado");
+    }
 
 
 }

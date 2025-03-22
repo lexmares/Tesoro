@@ -72,14 +72,14 @@ public class PantallaInicio extends JFrame implements ActionListener {
 
     }
 
-    private void playerSelection(JPanel gameConfig) {
+    private void playerSelection(JPanel gameConfig) { //seleccion de numero de jugadores
         String[] options = {"1", "2", "3", "4"};
         selectionP = new JComboBox<>(options);
         selectionP.addActionListener(this);
         gameConfig.add(selectionP);
     }
 
-    private void difficultySelection(JPanel gameConfig) {
+    private void difficultySelection(JPanel gameConfig) { //seleccion de dificultad
         String[] options = {"Fácil", "Normal", "Difícil"};
         selectionD = new JComboBox<>(options);
         selectionD.addActionListener(this);
