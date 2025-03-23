@@ -49,6 +49,8 @@ public class PantallaPrincipal extends JFrame {
 
         this.add(interfazPrincipal);
         inicializarComponentes();
+
+
     }
 
     private void  inicializarComponentes() {
@@ -97,9 +99,7 @@ public class PantallaPrincipal extends JFrame {
 
 
 
-    public static void avanceJugador(){
 
-    }
 
 
     private void generarTablero(JPanel tablero){
@@ -146,6 +146,24 @@ public class PantallaPrincipal extends JFrame {
         interfazDerecha.add(acertijosV2.getPanelAcertijo());
         acertijosV2.getPanelAcertijo().setBackground(Color.LIGHT_GRAY); //color provicional
 
+    }
+
+
+    public void mecanismoDeJuego(){
+
+    }
+
+    public static void avanceJugador(){
+
+    }
+
+    private void isVictory(){
+        if(pistas.isFinalResuelto()){
+            JOptionPane.showMessageDialog(null,"La búsqueda ha finalizado.");
+            dispose();
+            PantallaFinal pantallaFinal = new PantallaFinal(players);
+            pantallaFinal.setVisible(true);
+        }
     }
 
 }

@@ -3,6 +3,7 @@ import javax.swing.*;
 public class HiloJugador extends Thread{
     private String nombreJugador;
     private ImageIcon iconoJugador;
+    private int progreso;
     public HiloJugador(String nombreJugador, String direction){
         this.nombreJugador = nombreJugador;
         iconoJugador = new ImageIcon(direction);

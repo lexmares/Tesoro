@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Pistas {
     JPanel panelPistas;
@@ -9,6 +7,8 @@ public class Pistas {
     JLabel labelSymbol;
     Font letraNormal;
     Font letraSymbol;
+
+    boolean finalResuelto = false;
 
     int pistaActual = 0;
     static final int NO_PISTAS = 8;
@@ -36,7 +36,7 @@ public class Pistas {
     };
 
     String fraseFinal = "con el plano y rumbo correcto descifra la clave que abre el cofre en la isla para hallar el dinero";
-
+    String acertijoFinal = "\uF063\uF06F\uF06E\uF020\uF065\uF06C\uF020\uF070\uF06C\uF061\uF06E\uF06F\uF020\uF079\uF020\uF072\uF075\uF06D\uF062\uF06F\uF020\uF063\uF06F\uF072\uF072\uF065\uF063\uF074\uF06F\uF020\uF064\uF065\uF073\uF063\uF069\uF066\uF072\uF061\uF020\uF06C\uF061\uF020\uF063\uF06C\uF061\uF076\uF065\uF020\uF071\uF075\uF065\uF020\uF061\uF062\uF072\uF065\uF020\uF065\uF06C\uF020\uF063\uF06F\uF066\uF072\uF065\uF020\uF065\uF06E\uF020\uF06C\uF061\uF020\uF069\uF073\uF06C\uF061\uF020\uF070\uF061\uF072\uF061\uF020\uF068\uF061\uF06C\uF06C\uF061\uF072\uF020\uF065\uF06C\uF020\uF064\uF069\uF06E\uF065\uF072\uF06F";
     public Pistas(){
         panelPistas = new JPanel(new GridLayout(3, 1));
         panelPistas.add(new JLabel("Pista actual", SwingConstants.CENTER));
@@ -65,98 +65,70 @@ public class Pistas {
         }
     }
 
-    private Font cargarFuente(String ruta, int tamano) {
-        try {
-            File archivoFuente = new File(ruta);
-            if (!archivoFuente.exists()) {
-                System.out.println("Error: La fuente no existe en la ruta: " + ruta);
-                return new Font("Arial", Font.BOLD, tamano);
-            }
+    public void problemaFinal(){
+        String respuestaFinal = JOptionPane.showInputDialog("Acetijo final: " + acertijoFinal);
 
-            Font fuente = Font.createFont(Font.TRUETYPE_FONT, archivoFuente);
-            System.out.println("Fuente cargada correctamente: " + fuente.getFontName());
-
-            // Registrar la fuente
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(fuente);
-
-            return fuente.deriveFont((float) tamano);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-            System.out.println("No se pudo cargar la fuente, usando Arial.");
-            return new Font("Arial", Font.BOLD, tamano);
+//        if(respuestaFinal == null){
+//            finalResuelto = false;
+//        }else
+            if(respuestaFinal.trim().equalsIgnoreCase(fraseFinal)){
+            finalResuelto = true;
+            JOptionPane.showMessageDialog(null, "LO LOGASTE!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Te equivcaste, intentalo de nuevo después");
         }
     }
 
+
+
+
+
+
+
+
+
+
     public JPanel getPanelPistas() {
         return panelPistas;
-    }
-
-    public void setPanelPistas(JPanel panelPistas) {
-        this.panelPistas = panelPistas;
     }
 
     public JLabel getLabelNormal() {
         return labelNormal;
     }
 
-    public void setLabelNormal(JLabel labelNormal) {
-        this.labelNormal = labelNormal;
-    }
-
     public JLabel getLabelSymbol() {
         return labelSymbol;
-    }
-
-    public void setLabelSymbol(JLabel labelSymbol) {
-        this.labelSymbol = labelSymbol;
     }
 
     public Font getLetraNormal() {
         return letraNormal;
     }
 
-    public void setLetraNormal(Font letraNormal) {
-        this.letraNormal = letraNormal;
-    }
-
     public Font getLetraSymbol() {
         return letraSymbol;
     }
 
-    public void setLetraSymbol(Font letraSymbol) {
-        this.letraSymbol = letraSymbol;
+    public boolean isFinalResuelto() {
+        return finalResuelto;
     }
 
     public int getPistaActual() {
         return pistaActual;
     }
 
-    public void setPistaActual(int pistaActual) {
-        this.pistaActual = pistaActual;
-    }
-
     public String[] getPistas() {
         return pistas;
-    }
-
-    public void setPistas(String[] pistas) {
-        this.pistas = pistas;
     }
 
     public String[] getTraduccionPistas() {
         return traduccionPistas;
     }
 
-    public void setTraduccionPistas(String[] traduccionPistas) {
-        this.traduccionPistas = traduccionPistas;
-    }
-
     public String getFraseFinal() {
         return fraseFinal;
     }
 
-    public void setFraseFinal(String fraseFinal) {
-        this.fraseFinal = fraseFinal;
+    public String getAcertijoFinal() {
+        return acertijoFinal;
     }
 }

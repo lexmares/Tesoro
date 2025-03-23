@@ -4,11 +4,11 @@ import java.awt.*;
 public class Temporizador extends Thread{
 
     JPanel panelTemp;
-    //JLabel labelMins;
+
     JLabel labelsec;
     static final int limitePredet = 60;
 
-    //private int limiteMin;
+    
     private int limiteSec;
     Timer timer;
     private int segundos = 60;
@@ -40,8 +40,8 @@ public class Temporizador extends Thread{
             procesoTiempo();
             if(segundos == 0){
                 timer.stop();
-
                 segundos = limiteSec;
+
             }
         });
         timer.setRepeats(true);
@@ -52,44 +52,24 @@ public class Temporizador extends Thread{
         segundos--;
         labelsec.setText(String.format("%02d", segundos));
     }
-
     public JPanel getPanelTemp() {
         return panelTemp;
-    }
-
-    public void setPanelTemp(JPanel panelTemp) {
-        this.panelTemp = panelTemp;
     }
 
     public JLabel getLabelsec() {
         return labelsec;
     }
 
-    public void setLabelsec(JLabel labelsec) {
-        this.labelsec = labelsec;
-    }
-
     public int getLimiteSec() {
         return limiteSec;
-    }
-
-    public void setLimiteSec(int limiteSec) {
-        this.limiteSec = limiteSec;
     }
 
     public Timer getTimer() {
         return timer;
     }
 
-    public void setTimer(Timer timer) {
-        this.timer = timer;
-    }
-
     public int getSegundos() {
         return segundos;
     }
 
-    public void setSegundos(int segundos) {
-        this.segundos = segundos;
-    }
 }

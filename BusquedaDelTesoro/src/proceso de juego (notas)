@@ -1,0 +1,15 @@
+mecanismo de juego:
+
+inicia el turno*
+
+- el juego saca un acertijo al azar
+- el tempo se activa
+- el jugador tiene n segundos para responder
+
+ - tenemos varios casos:
+    . el jugador no responde y se acaba el tiempo
+    . el jugador responde y el temporizador se interrumpe
+
+- verifica la respuesta:
+    . la respuesta es correcta, el progreso del jugador aumenta en 1 (avanza una casilla)
+    . la respuesta es incorrecta, el jugador se queda en su lugar y pierde el turno
