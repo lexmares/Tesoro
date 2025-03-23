@@ -1,4 +1,3 @@
-import javax.print.DocFlavor;
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,16 +6,20 @@ public class PantallaPrincipal extends JFrame {
     static final int maxJugadores = 4;
 
     JPanel interfazPrincipal;
+    JPanel interfazDerecha;
+
+
     JPanel panelPlayers;
     JLabel[] jugadores;
 
     JPanel menu;
     JPanel tablero;
-    JPanel espacioCartas;
-    CardLayout cardLayout;
+
+//    JPanel espacioCartas;
+//    CardLayout cardLayout;
     JPanel[] cartas;
     JLabel[] contenidoCartas;
-    JLabel temporizador;
+
 
     JButton[][] casillas;
 
@@ -26,15 +29,21 @@ public class PantallaPrincipal extends JFrame {
     //temporizador
     Temporizador tempo;
 
+    //elementos visuales para la interfaz derecha
+    //Acertijos acertijos = new Acertijos();
+    AcertijosV2 acertijosV2 = new AcertijosV2();
+    Pistas pistas = new Pistas();
+
     public PantallaPrincipal(int noJugadores, String dificultad){
 
-        tempo = new Temporizador(definirDificultad(dificultad));
+        tempo = new Temporizador(definirDificultad(dificultad)); //defin el temporizador segun la dificultad
         seleccionJugadores(noJugadores);
 
 
         this.setSize(1250, 650);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setTitle("Games");
+        this.setTitle("Game");
+        this.setLocationRelativeTo(null);
 
         interfazPrincipal = new JPanel(new BorderLayout());
 
@@ -45,20 +54,26 @@ public class PantallaPrincipal extends JFrame {
     private void  inicializarComponentes() {
         panelPlayers = new JPanel(new GridLayout(1, maxJugadores)); //contenedor principal
         menu = new JPanel(new GridLayout(1,2)); // panel de la derecha
-        cardLayout = new CardLayout();
-        espacioCartas = new JPanel(cardLayout); //espacio de las cartas para el card layout
+
+        //cardLayout = new CardLayout();
+        //espacioCartas = new JPanel(cardLayout); //espacio de las cartas para el card layout
 
         tablero = new JPanel(new GridLayout(dimensionesTablero, dimensionesTablero));//tablero de 7x7
         //panel para usar los botones
 
-        interfazPrincipal.add(tempo.labelsec, BorderLayout.EAST);
+
         tablero = new JPanel(new GridLayout(7,7));
         generarTablero(tablero);
         interfazPrincipal.add(tablero, BorderLayout.CENTER);
+
+        interfazDerecha = new JPanel(new GridLayout(4, 1));
+        configurarInterfazDerecha();
+        interfazPrincipal.add(interfazDerecha, BorderLayout.EAST);
+
     }
 
     public void ejecutarTimer(){
-        tempo.run();
+        tempo.start();
     }
 
     public int definirDificultad(String dificultad){
@@ -88,7 +103,6 @@ public class PantallaPrincipal extends JFrame {
 
 
     private void generarTablero(JPanel tablero){
-
         casillas = new JButton[7][7];
         for (int i=0; i<7; i++){
             for (int j=0; j<7; j++){
@@ -119,11 +133,20 @@ public class PantallaPrincipal extends JFrame {
         for (int i = 5; i > 0; i--) {
             casillas[i][0].setText(String.valueOf(numCasilla++));
         }
-        }
+    }
 
+    private void configurarInterfazDerecha(){
 
+        interfazDerecha.add(pistas.getPanelPistas());
+        pistas.getPanelPistas().setBackground(Color.ORANGE);
 
+        interfazDerecha.add(tempo.getPanelTemp());
+        tempo.getLabelsec().setBackground(Color.CYAN);
 
+        interfazDerecha.add(acertijosV2.getPanelAcertijo());
+        acertijosV2.getPanelAcertijo().setBackground(Color.LIGHT_GRAY); //color provicional
 
     }
+
+}
 

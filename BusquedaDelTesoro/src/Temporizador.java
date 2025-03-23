@@ -52,9 +52,44 @@ public class Temporizador extends Thread{
         segundos--;
         labelsec.setText(String.format("%02d", segundos));
     }
-    public JPanel getPanel() {
+
+    public JPanel getPanelTemp() {
         return panelTemp;
     }
 
+    public void setPanelTemp(JPanel panelTemp) {
+        this.panelTemp = panelTemp;
+    }
 
+    public JLabel getLabelsec() {
+        return labelsec;
+    }
+
+    public void setLabelsec(JLabel labelsec) {
+        this.labelsec = labelsec;
+    }
+
+    public int getLimiteSec() {
+        return limiteSec;
+    }
+
+    public void setLimiteSec(int limiteSec) {
+        this.limiteSec = limiteSec;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
+
+    public int getSegundos() {
+        return segundos;
+    }
+
+    public void setSegundos(int segundos) {
+        this.segundos = segundos;
+    }
 }

@@ -1,14 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Acertijos {
+public class AcertijosV2 {
     static final int NO_ACERTIJOS = 32;
 
-    int acertijoActual = 0;
-    JPanel panelCartas;
-    CardLayout cardLayout = new CardLayout();
-    JLabel[] acertijosLabels;
-    JLabel predet;
+    boolean isCorrecto;
+    int acertijoActual = -1;
+    JPanel panelAcertijo;
+    JLabel acertijosLabel;
+    JTextArea acertijoText;
+
+    JTextField respuesta;
 
     String[] acertijos = {
             "Sin rostro y sin ojos. Sin embargo, lloro cuando me cortan.",
@@ -80,44 +82,66 @@ public class Acertijos {
             "goma"
     };
 
-    public Acertijos(){
-        acertijosLabels = new JLabel[NO_ACERTIJOS];
+    public AcertijosV2(){
+        this.panelAcertijo = new JPanel(new GridLayout(2,1));
+        panelAcertijo.setPreferredSize(new Dimension(250, 400));
 
-        for(int i = 0; i < NO_ACERTIJOS; i++){
-            acertijosLabels[i] = new JLabel(acertijos[i], SwingConstants.CENTER);
-            //acertijosLabels[i].setFont(new Font("Arial", Font.BOLD, 15));
+        //this.acertijosLabel = new JLabel("???");
+        //acertijosLabel.setFont(new Font("Lucida Handwriting", Font.PLAIN, 15));
+
+        this.acertijoText = new JTextArea("???");
+        acertijoText.setOpaque(false); //opcional para hacer transparente el area o eso creo xd
+        acertijoText.setFont(new Font("Lucida Handwriting", Font.PLAIN, 13));
+
+        acertijoText.setLineWrap(true);
+        acertijoText.setWrapStyleWord(true);
+        acertijoText.setEditable(false);
+
+        //panelAcertijo.add(acertijosLabel);
+        panelAcertijo.add(acertijoText);
+
+        iniciarTextFieldRespuestas();
+
+    }
+
+    private void iniciarTextFieldRespuestas() {
+        respuesta = new JTextField();
+        respuesta.addActionListener(e -> {
+            avisoRespuesta();
+        });
+
+        panelAcertijo.add(respuesta);
+    }
+
+    private boolean comprobarRespuesta() {
+        return respuesta.getText().trim().equalsIgnoreCase(respuestas[acertijoActual]);
+    }
+    private void avisoRespuesta(){
+        if(comprobarRespuesta()){
+            isCorrecto = true;
+            JOptionPane.showMessageDialog(null, "Su respuesta es correcta");
         }
-        iniciarComponentes();
-    }
-    public void iniciarComponentes(){
-        cardLayout = new CardLayout();
-        panelCartas = new JPanel(cardLayout);
-
-        agregarLabelsAlPanel();
-
-        predet = new JLabel("???", SwingConstants.CENTER);
-        panelCartas.add(predet, "predeterminado");
-
-        cardLayout.show(panelCartas, "predeterminado");
-
-    }
-
-    private void agregarLabelsAlPanel() {
-        for(int i = 0; i < NO_ACERTIJOS; i++){
-            panelCartas.add(acertijosLabels[i], "ac" + i);
+        else{
+            isCorrecto = false;
+            JOptionPane.showMessageDialog(null, "Respuesta incorrecta");
         }
     }
 
-    public int solicitarAcertijo(){
-        acertijoActual = (int) (Math.random() * NO_ACERTIJOS);
+
+    private int solicitarAcertijo(){
+        int nuevoAcertijo;
+        do {
+            nuevoAcertijo = (int) (Math.random() * NO_ACERTIJOS);
+        } while (nuevoAcertijo == acertijoActual);
+
+        acertijoActual = nuevoAcertijo;
         return acertijoActual;
     }
 
     public void mostrarAcertijo(){
-        cardLayout.show(panelCartas, "ac" + solicitarAcertijo());
-    }
-    public void mostrarCaraPredeterminada(){
-        cardLayout.show(panelCartas, "predeterminado");
+        //acertijosLabel.setText(acertijos[solicitarAcertijo()]);
+        acertijoText.setText(acertijos[solicitarAcertijo()]);
+        respuesta.setText("");
     }
 
     public int getAcertijoActual() {
@@ -128,51 +152,19 @@ public class Acertijos {
         this.acertijoActual = acertijoActual;
     }
 
-    public JPanel getPanelCartas() {
-        return panelCartas;
+    public JPanel getPanelAcertijo() {
+        return panelAcertijo;
     }
 
-    public void setPanelCartas(JPanel panelCartas) {
-        this.panelCartas = panelCartas;
+    public void setPanelAcertijo(JPanel panelAcertijo) {
+        this.panelAcertijo = panelAcertijo;
     }
 
-    public CardLayout getCardLayout() {
-        return cardLayout;
+    public JLabel getAcertijosLabel() {
+        return acertijosLabel;
     }
 
-    public void setCardLayout(CardLayout cardLayout) {
-        this.cardLayout = cardLayout;
-    }
-
-    public JLabel[] getAcertijosLabels() {
-        return acertijosLabels;
-    }
-
-    public void setAcertijosLabels(JLabel[] acertijosLabels) {
-        this.acertijosLabels = acertijosLabels;
-    }
-
-    public JLabel getPredet() {
-        return predet;
-    }
-
-    public void setPredet(JLabel predet) {
-        this.predet = predet;
-    }
-
-    public String[] getAcertijos() {
-        return acertijos;
-    }
-
-    public void setAcertijos(String[] acertijos) {
-        this.acertijos = acertijos;
-    }
-
-    public String[] getRespuestas() {
-        return respuestas;
-    }
-
-    public void setRespuestas(String[] respuestas) {
-        this.respuestas = respuestas;
+    public void setAcertijosLabel(JLabel acertijosLabel) {
+        this.acertijosLabel = acertijosLabel;
     }
 }

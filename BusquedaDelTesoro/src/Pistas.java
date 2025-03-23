@@ -39,17 +39,17 @@ public class Pistas {
 
     public Pistas(){
         panelPistas = new JPanel(new GridLayout(3, 1));
-        panelPistas.add(new JLabel("Pista"));
+        panelPistas.add(new JLabel("Pista actual", SwingConstants.CENTER));
 
-        labelSymbol = new JLabel("\uF070\uF069\uF073\uF074\uF061\uF073");
-        labelNormal = new JLabel("Pistas");
+        labelSymbol = new JLabel("\uF070\uF069\uF073\uF074\uF061\uF073", SwingConstants.CENTER);
+        labelNormal = new JLabel("Pistas", SwingConstants.CENTER);
 
         panelPistas.add(labelSymbol);
         panelPistas.add(labelNormal);
 
-        //letraSymbol = cargarFuente("C:/Users/alexj/OneDrive/Documentos/TAP/BusquedaDelTesoro/src/wingdings/wingding.ttf", 20);
-        //letraSymbol = new Font("Wingdings", Font.BOLD, 20);
-        //letraNormal = new Font("Arial", Font.BOLD, 20);
+        letraSymbol = new Font("Wingdings", Font.BOLD, 20);
+        letraNormal = new Font("Arial", Font.BOLD, 20);
+
         labelSymbol.setFont(letraSymbol);
         labelNormal.setFont(letraNormal);
 
@@ -88,4 +88,75 @@ public class Pistas {
         }
     }
 
+    public JPanel getPanelPistas() {
+        return panelPistas;
+    }
+
+    public void setPanelPistas(JPanel panelPistas) {
+        this.panelPistas = panelPistas;
+    }
+
+    public JLabel getLabelNormal() {
+        return labelNormal;
+    }
+
+    public void setLabelNormal(JLabel labelNormal) {
+        this.labelNormal = labelNormal;
+    }
+
+    public JLabel getLabelSymbol() {
+        return labelSymbol;
+    }
+
+    public void setLabelSymbol(JLabel labelSymbol) {
+        this.labelSymbol = labelSymbol;
+    }
+
+    public Font getLetraNormal() {
+        return letraNormal;
+    }
+
+    public void setLetraNormal(Font letraNormal) {
+        this.letraNormal = letraNormal;
+    }
+
+    public Font getLetraSymbol() {
+        return letraSymbol;
+    }
+
+    public void setLetraSymbol(Font letraSymbol) {
+        this.letraSymbol = letraSymbol;
+    }
+
+    public int getPistaActual() {
+        return pistaActual;
+    }
+
+    public void setPistaActual(int pistaActual) {
+        this.pistaActual = pistaActual;
+    }
+
+    public String[] getPistas() {
+        return pistas;
+    }
+
+    public void setPistas(String[] pistas) {
+        this.pistas = pistas;
+    }
+
+    public String[] getTraduccionPistas() {
+        return traduccionPistas;
+    }
+
+    public void setTraduccionPistas(String[] traduccionPistas) {
+        this.traduccionPistas = traduccionPistas;
+    }
+
+    public String getFraseFinal() {
+        return fraseFinal;
+    }
+
+    public void setFraseFinal(String fraseFinal) {
+        this.fraseFinal = fraseFinal;
+    }
 }
