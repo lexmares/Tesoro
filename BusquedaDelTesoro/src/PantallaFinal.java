@@ -7,9 +7,9 @@ public class PantallaFinal extends JFrame{
     JPanel[] panelJugadores = new JPanel[PantallaPrincipal.maxJugadores];
     JLabel[] labelJugadores = new JLabel[PantallaPrincipal.maxJugadores];
 
-    public PantallaFinal(HiloJugador[] jugadores){
-
-    }
+//    public PantallaFinal(HiloJugador[] jugadores){
+//
+//    }
 
 
 

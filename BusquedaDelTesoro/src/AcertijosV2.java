@@ -101,12 +101,12 @@ public class AcertijosV2 {
         panelAcertijo.add(acertijoText);
 
         iniciarTextFieldRespuestas();
-
     }
 
     private void iniciarTextFieldRespuestas() {
         respuesta = new JTextField();
         respuesta.addActionListener(e -> {
+
             avisoRespuesta();
         });
 
@@ -116,7 +116,7 @@ public class AcertijosV2 {
     private boolean comprobarRespuesta() {
         return respuesta.getText().trim().equalsIgnoreCase(respuestas[acertijoActual]);
     }
-    private void avisoRespuesta(){
+    public void avisoRespuesta(){
         if(comprobarRespuesta()){
             isCorrecto = true;
             JOptionPane.showMessageDialog(null, "Su respuesta es correcta");

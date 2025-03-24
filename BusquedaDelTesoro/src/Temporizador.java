@@ -3,32 +3,26 @@ import java.awt.*;
 
 public class Temporizador extends Thread{
 
-    JPanel panelTemp;
-
-    JLabel labelsec;
     static final int limitePredet = 60;
 
     
     private int limiteSec;
     Timer timer;
     private int segundos = 60;
+    AcertijosV2 acertijosV2;
+    JLabel labelSec;
 
+    public Temporizador(int limiteSec, AcertijosV2 acertijosV2, JLabel labelSec){
+        this.acertijosV2 = acertijosV2;
 
-    public Temporizador(int limiteSec){
         this.limiteSec = limiteSec;
-        panelTemp = new JPanel(new GridLayout(1,1));
+
+        this.labelSec = labelSec;
+
         segundos = limiteSec;
-        iniciarComponentes();
     }
 
-    private void iniciarComponentes() {
-        labelsec = new JLabel(limiteSec+"", SwingConstants.CENTER);
 
-        labelsec.setFont(new Font("Arial", Font.BOLD, 30));
-
-        panelTemp.add(labelsec);
-
-    }
 
     @Override
     public void run(){
@@ -40,7 +34,7 @@ public class Temporizador extends Thread{
             procesoTiempo();
             if(segundos == 0){
                 timer.stop();
-                segundos = limiteSec;
+                acertijosV2.avisoRespuesta();
 
             }
         });
@@ -48,17 +42,16 @@ public class Temporizador extends Thread{
         timer.start();
     }
 
-    private void procesoTiempo() {
-        segundos--;
-        labelsec.setText(String.format("%02d", segundos));
-    }
-    public JPanel getPanelTemp() {
-        return panelTemp;
+    public void reiniciar(){
+        segundos = limiteSec;
+        labelSec.setText(String.format("%02d", segundos));
     }
 
-    public JLabel getLabelsec() {
-        return labelsec;
+    private void procesoTiempo() {
+        segundos--;
+        labelSec.setText(String.format("%02d", segundos));
     }
+
 
     public int getLimiteSec() {
         return limiteSec;
