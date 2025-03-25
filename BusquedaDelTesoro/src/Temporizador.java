@@ -1,68 +1,45 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Temporizador extends Thread{
+public class Temporizador extends Thread {
+    private final int limiteSegundos;
+    private int segundosRestantes;
+    private boolean activo = false;
 
-    static final int limitePredet = 60;
-
-    
-    private int limiteSec;
-    Timer timer;
-    private int segundos = 60;
-    AcertijosV2 acertijosV2;
-    JLabel labelSec;
-
-    public Temporizador(int limiteSec, AcertijosV2 acertijosV2, JLabel labelSec){
-        this.acertijosV2 = acertijosV2;
-
-        this.limiteSec = limiteSec;
-
-        this.labelSec = labelSec;
-
-        segundos = limiteSec;
+    public Temporizador(int limiteSegundos) {
+        this.limiteSegundos = limiteSegundos;
+        this.segundosRestantes = limiteSegundos;
     }
 
+    public void reiniciar() {
+        this.segundosRestantes = limiteSegundos;
+        activo = true;
+    }
 
+    // Detiene la cuenta regresiva.
+    public void detener() {
+        activo = false;
+    }
+
+    public int getSegundosRestantes() {
+        return segundosRestantes;
+    }
 
     @Override
-    public void run(){
-        mecanismoTempo();
-    }
-
-    private void mecanismoTempo() {
-        timer = new Timer(1000, e ->{
-            procesoTiempo();
-            if(segundos == 0){
-                timer.stop();
-                acertijosV2.avisoRespuesta();
-
+    public void run() {
+        while (segundosRestantes > 0 && activo) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        });
-        timer.setRepeats(true);
-        timer.start();
+            segundosRestantes--;
+            //System.out.println("Tiempo restante: " + segundosRestantes + " seg");
+
+        }
+        if (segundosRestantes == 0) {
+            activo = false;
+            JOptionPane.showMessageDialog(null, "Tiempo agotado. Pierdes el turno.");
+        }
     }
-
-    public void reiniciar(){
-        segundos = limiteSec;
-        labelSec.setText(String.format("%02d", segundos));
-    }
-
-    private void procesoTiempo() {
-        segundos--;
-        labelSec.setText(String.format("%02d", segundos));
-    }
-
-
-    public int getLimiteSec() {
-        return limiteSec;
-    }
-
-    public Timer getTimer() {
-        return timer;
-    }
-
-    public int getSegundos() {
-        return segundos;
-    }
-
 }
