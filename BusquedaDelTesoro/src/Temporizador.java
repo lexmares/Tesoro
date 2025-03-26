@@ -1,45 +1,86 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Temporizador extends Thread {
-    private final int limiteSegundos;
-    private int segundosRestantes;
-    private boolean activo = false;
+public class Temporizador extends Thread{
 
-    public Temporizador(int limiteSegundos) {
-        this.limiteSegundos = limiteSegundos;
-        this.segundosRestantes = limiteSegundos;
+    static final int limitePredet = 60;
+    PantallaPrincipal pantallaPrincipal;
+
+    private int limiteSec;
+
+    private int segundos = 60;
+    AcertijosV2 acertijosV2;
+    JLabel labelSec;
+
+    //static volatile boolean[] turno = {false, false, false, false};
+
+    public Temporizador(int limiteSec, AcertijosV2 acertijosV2, JLabel labelSec, PantallaPrincipal pantallaPrincipal){
+        this.acertijosV2 = acertijosV2;
+
+        this.limiteSec = limiteSec;
+
+        this.labelSec = labelSec;
+
+        segundos = limiteSec;
+
+        this.pantallaPrincipal = pantallaPrincipal;
     }
 
-    public void reiniciar() {
-        this.segundosRestantes = limiteSegundos;
-        activo = true;
-    }
 
-    // Detiene la cuenta regresiva.
-    public void detener() {
-        activo = false;
-    }
-
-    public int getSegundosRestantes() {
-        return segundosRestantes;
-    }
 
     @Override
     public void run() {
-        while (segundosRestantes > 0 && activo) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            segundosRestantes--;
-            //System.out.println("Tiempo restante: " + segundosRestantes + " seg");
+        int i = -1;
+        while(!Pistas.finalResuelto) {
+            i++;
+            if(i == pantallaPrincipal.noJugadores)
+                i = 0;
 
-        }
-        if (segundosRestantes == 0) {
-            activo = false;
-            JOptionPane.showMessageDialog(null, "Tiempo agotado. Pierdes el turno.");
+            reiniciar();
+            pantallaPrincipal.hiloPlayers[i] = new HiloPlayer(i+1,pantallaPrincipal.players[i], pantallaPrincipal.acertijosV2, pantallaPrincipal);
+            pantallaPrincipal.hiloPlayers[i].start();
+            while (segundos > 0) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+
+                if(AcertijosV2.acertijoRespondido){
+                    break;
+                }
+
+                segundos--;
+                labelSec.setText(String.format("%02d", segundos));
+
+            }
+            //acertijosV2.avisoRespuesta();
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            AcertijosV2.acertijoRespondido = false;
         }
     }
+
+
+    public void reiniciar(){
+        segundos = limiteSec;
+        labelSec.setText(String.format("%02d", segundos));
+    }
+
+    private void procesoTiempo() {
+        segundos--;
+        labelSec.setText(String.format("%02d", segundos));
+    }
+
+
+    public int getLimiteSec() {
+        return limiteSec;
+    }
+
+
+
+
 }

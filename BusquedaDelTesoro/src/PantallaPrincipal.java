@@ -1,109 +1,224 @@
 import javax.swing.*;
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class PantallaPrincipal extends JFrame {
-    static final int DIMENSION_TABLERO = 7;
-    static final int MAX_JUGADORES = 4;
+    static final int dimensionesTablero = 7;
+    static final int maxJugadores = 4;
 
+    JPanel interfazPrincipal;
+    JPanel interfazDerecha;
+
+
+    JPanel panelPlayers;
+    JLabel[] jugadores;
+
+    JPanel menu;
+    JPanel tablero;
+
+
+    JButton[][] casillas;
+
+    //jugador
     Player[] players;
+    HiloPlayer[] hiloPlayers;
+
+    //temporizador
+    static Temporizador tempo;
+    JPanel panelTemp;
+    JLabel labelSec;
+    static int TIEMPO_FACIL = 90;
+    static int TIEMPO_NORMAL = 60;
+    static int TIEMPO_DIFICIL = 30;
+    int tiempoTempo;
+
+
+    //elementos visuales para la interfaz derecha
+    //Acertijos acertijos = new Acertijos();
     AcertijosV2 acertijosV2 = new AcertijosV2();
     Pistas pistas = new Pistas();
+
     int noJugadores;
-    int nextSpecialCell = 3; // Umbral para activar la siguiente casilla especial
 
     public PantallaPrincipal(int noJugadores, String dificultad) {
+
+        definirDificultad(dificultad); //defin el temporizador segun la dificultad
+        labelSec = new JLabel(tiempoTempo + "", SwingConstants.CENTER);
+
+        labelSec.setFont(new Font("Arial", Font.BOLD, 30));
+
+        panelTemp = new JPanel(new GridLayout(2, 1));
+        panelTemp.add(new JLabel("Segundos restantes. Resuelve el acertijo:", SwingConstants.CENTER));
+        panelTemp.add(labelSec, SwingConstants.CENTER);
+
+
+        seleccionJugadores(noJugadores);
+        hiloPlayers = new HiloPlayer[noJugadores];
+
+        this.setSize(1180, 850);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setTitle("Game");
+        this.setLocationRelativeTo(null);
+
+        interfazPrincipal = new JPanel(new BorderLayout());
+
+        this.add(interfazPrincipal);
+        inicializarComponentes();
+
+
+    }
+
+    private void inicializarComponentes() {
+        panelPlayers = new JPanel(new GridLayout(1, maxJugadores)); //contenedor principal
+        menu = new JPanel(new GridLayout(1, 2)); // panel de la derecha
+
+        tablero = new JPanel() {
+            private Image fondo = new ImageIcon("BusquedaDelTesoro/Graphics/board.png").getImage();
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        tablero.setLayout(new GridLayout(dimensionesTablero, dimensionesTablero));  // Tablero de 7x7
+        tablero.setSize(630, 630);
+        tablero.setBorder(new LineBorder(Color.BLACK, 5));
+        generarTablero(tablero);
+
+        interfazPrincipal.add(tablero, BorderLayout.CENTER);
+
+        generarPanelPlayers(panelPlayers, noJugadores);
+        interfazPrincipal.add(panelPlayers, BorderLayout.NORTH);
+
+        interfazDerecha = new JPanel(new GridLayout(4, 1));
+        configurarInterfazDerecha();
+        interfazPrincipal.add(interfazDerecha, BorderLayout.EAST);
+
+        iniciarJuego();
+
+    }
+
+    private void iniciarJuego() {
+            tempo = new Temporizador(tiempoTempo, acertijosV2, labelSec, this);
+            tempo.start();
+    }
+
+
+    private void generarPanelPlayers(JPanel panelPlayers, int noJugadores) {
+        JLabel[] labelPlayers = new JLabel[noJugadores];
+        int jugador = 1;
+        for (int i = 0; i < noJugadores; i++) {
+            JLabel fichaPlayer = new JLabel();
+            fichaPlayer.setText("JUGADOR " + jugador);
+            ImageIcon originalIcon = new ImageIcon("BusquedaDelTesoro/Graphics/Players/" + (i + 1) + ".png");
+            Image scaledImage = originalIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+            fichaPlayer.setIcon(new ImageIcon(scaledImage));
+            jugador++;
+            fichaPlayer.setBackground(new Color(59,31,25));
+            fichaPlayer.setBorder(new LineBorder(Color.BLACK, 5));
+            fichaPlayer.setOpaque(true);
+            fichaPlayer.setFont(new Font("Yu Gothic",Font.BOLD,12));
+            fichaPlayer.setForeground(Color.WHITE);
+            fichaPlayer.setHorizontalAlignment(SwingConstants.CENTER);
+            fichaPlayer.setVerticalAlignment(SwingConstants.CENTER);
+
+            fichaPlayer.setHorizontalTextPosition(SwingConstants.CENTER);
+            fichaPlayer.setVerticalTextPosition(SwingConstants.BOTTOM);
+            labelPlayers[i] = fichaPlayer;
+            panelPlayers.add(labelPlayers[i]);
+        }
+    }
+
+    public void definirDificultad(String dificultad) {
+        switch (dificultad) {
+            case "Fácil":
+                tiempoTempo = TIEMPO_FACIL;
+                break;
+            case "Normal":
+                tiempoTempo = TIEMPO_NORMAL;
+                break;
+            case "Difícil":
+                tiempoTempo = TIEMPO_DIFICIL;
+                break;
+            default:
+                tiempoTempo = TIEMPO_FACIL;
+
+        }
+    }
+
+    private void seleccionJugadores(int noJugadores) {
         this.noJugadores = noJugadores;
         players = new Player[noJugadores];
+
         for (int i = 0; i < noJugadores; i++) {
-            String nombre = JOptionPane.showInputDialog("Jugador " + (i + 1) + ": Ingrese su nombre:");
-            players[i] = new Player(nombre, i, this);
-        }
-
-        // Configuración básica de la ventana (puedes ampliar la interfaz)
-        setSize(1250, 650);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle("Juego de Acertijos");
-        setLayout(new BorderLayout());
-        // Aquí podrías agregar paneles para el tablero y zona de pistas.
-        add(pistas.panelPistas, BorderLayout.EAST);
-        setVisible(true);
-
-        iniciarJuego(dificultad);
-    }
-
-    // Define el tiempo máximo en función de la dificultad.
-    private int definirDificultad(String dificultad) {
-        switch(dificultad) {
-            case "Fácil": return 90;
-            case "Normal": return 60;
-            case "Difícil": return 30;
-            default: return 60;
+            players[i] = new Player(JOptionPane.showInputDialog("Jugador " + (i + 1) + ", ingrese su nombre:"), "", this);
         }
     }
 
-    public void iniciarJuego(String dificultad) {
-        int tiempoMax = definirDificultad(dificultad);
-        boolean juegoTerminado = false;
+    private void generarTablero(JPanel tablero) {
 
-        // Bucle principal de turnos. Cada jugador juega su turno de forma secuencial.
-        while (!juegoTerminado) {
-            for (Player player : players) {
-                JOptionPane.showMessageDialog(this, "Turno del jugador: " + player.getNombreJugador());
 
-                // Muestra un acertijo al azar.
-                acertijosV2.mostrarAcertijo();
+        casillas = new JButton[7][7];
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                JButton casilla = new JButton();
+                casilla.setSize(100, 100);
+                casilla.setHorizontalAlignment(SwingConstants.RIGHT);
+                casilla.setVerticalAlignment(SwingConstants.BOTTOM);
+                casilla.setOpaque(false);
+                casilla.setForeground(Color.WHITE);
+                casilla.setContentAreaFilled(false);
+                casilla.setFont(new Font("Arial",Font.BOLD,17));
 
-                // Inicia el temporizador (instancia nueva cada turno).
-                Temporizador temp = new Temporizador(tiempoMax);
-                temp.reiniciar();
-                temp.start();
+                casillas[i][j] = casilla;
 
-                // Se pide la respuesta del jugador (bloqueante).
-                String respuesta = JOptionPane.showInputDialog("Tienes " + tiempoMax + " segundos.\nIngresa tu respuesta:");
-                // Al haber ingresado la respuesta (o cancelado), detenemos el temporizador.
-                temp.detener();
-                try {
-                    temp.join(); // Espera a que finalice el hilo del temporizador.
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                // Si el temporizador se terminó o el jugador no ingresó respuesta, se pierde el turno.
-                if (temp.getSegundosRestantes() == 0 || respuesta == null || respuesta.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Turno perdido.");
+                if (i == 0 || i == 6 || j == 0 || j == 6) {
+                    casilla.setBorder(new LineBorder(Color.BLACK, 5));
                 } else {
-                    if (acertijosV2.comprobarRespuesta(respuesta)) {
-                        player.aumentarProgreso();
-                        JOptionPane.showMessageDialog(this, "¡Respuesta correcta! Avanzas a la casilla " + player.getProgreso());
-
-                        // Si el jugador alcanza o supera la casilla especial (cada 3 avances) y esta no se ha activado ya,
-                        // se actualiza la pista (solo se activa una vez por umbral).
-                        if (player.getProgreso() >= nextSpecialCell) {
-                            while (player.getProgreso() >= nextSpecialCell) {
-                                pistas.mostrarPista();
-                                nextSpecialCell += 3;
-                            }
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Respuesta incorrecta. Pierdes el turno.");
-                    }
+                    casilla.setBorder(null);
                 }
 
-                // Si el jugador alcanza la casilla 24, se le presenta el acertijo final.
-                if (player.getProgreso() >= 24) {
-                    JOptionPane.showMessageDialog(this, "¡Has llegado a la casilla 24!\nAhora debes resolver el acertijo final.");
-                    boolean resFinal = pistas.problemaFinal();
-                    if (resFinal) {
-                        JOptionPane.showMessageDialog(this, "¡Felicidades, " + player.getNombreJugador() + "! Has ganado el juego.");
-                        juegoTerminado = true;
-                        break;
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Acertijo final incorrecto. El juego continúa.");
-                    }
-                }
-            } // fin de for de jugadores.
-        } // fin del while principal.
+                tablero.add(casillas[i][j]);
+            }
+        }
+
+        int numCasilla = 1;
+
+
+        for (int j = 0; j < 7; j++) {
+            casillas[0][j].setText(String.valueOf(numCasilla++));
+        }
+        for (int i = 1; i < 7; i++) {
+            casillas[i][6].setText(String.valueOf(numCasilla++));
+        }
+        for (int j = 5; j >= 0; j--) {
+            casillas[6][j].setText(String.valueOf(numCasilla++));
+        }
+        for (int i = 5; i > 0; i--) {
+            casillas[i][0].setText(String.valueOf(numCasilla++));
+        }
+
+
+    }
+
+    private void configurarInterfazDerecha() {
+
+        interfazDerecha.add(pistas.getPanelPistas());
+        pistas.getPanelPistas().setBackground(Color.ORANGE);
+        pistas.getPanelPistas().setVisible(true);
+
+        interfazDerecha.add(panelTemp);
+        labelSec.setBackground(Color.CYAN);
+
+
+        interfazDerecha.add(acertijosV2.getPanelAcertijo());
+        acertijosV2.getPanelAcertijo().setBackground(Color.LIGHT_GRAY); //colores provicionales
+
     }
 }
+
+
+
+

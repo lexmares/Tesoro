@@ -22,30 +22,39 @@ public class PantallaInicio extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Búsqueda del Tesoro");
 
-        screen = new JPanel(new BorderLayout());
+        screen = new JPanel(new BorderLayout()) {
+            private Image fondo = new ImageIcon("BusquedaDelTesoro/Graphics/pantallaInicio.png").getImage();
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
         initComp();
         this.add(screen);
     }
 
     private void initComp() {
-        northPanel = new JPanel();
-        title = new JLabel("Búsqueda del Tesoro", SwingConstants.CENTER);
-        northPanel.add(title);
 
-        centerPanel = new JPanel();
+
+        southPanel = new JPanel(new GridLayout(1,2));
+        southPanel.setOpaque(false);
 
         gameConfig = new JPanel(new GridLayout(2,2,10,10));
         JLabel players = new JLabel("Jugadores");
+        players.setBackground(Color.lightGray);
         JLabel difficulty = new JLabel("Dificultad");
+        difficulty.setBackground(Color.lightGray);
 
         gameConfig.add(players);
         gameConfig.add(difficulty);
 
         playerSelection(gameConfig);
         difficultySelection(gameConfig);
-        centerPanel.add(gameConfig);
+        southPanel.add(gameConfig);
 
-        southPanel = new JPanel();
+
 
         startButton = new JButton("START");
         startButton.addActionListener(new ActionListener() {
@@ -57,8 +66,6 @@ public class PantallaInicio extends JFrame implements ActionListener {
 
         southPanel.add(startButton);
 
-        screen.add(northPanel, BorderLayout.NORTH);
-        screen.add(centerPanel, BorderLayout.CENTER);
         screen.add(southPanel, BorderLayout.SOUTH);
 
 
@@ -76,11 +83,12 @@ public class PantallaInicio extends JFrame implements ActionListener {
         String[] options = {"1", "2", "3", "4"};
         selectionP = new JComboBox<>(options);
         selectionP.addActionListener(this);
+        selectionP.setBackground(Color.lightGray);
         gameConfig.add(selectionP);
     }
 
     private void difficultySelection(JPanel gameConfig) { //seleccion de dificultad
-        String[] options = {"Fácil", "Normal", "Difícil"};
+        String[] options = {"Fácil","Normal","Difícil"};
         selectionD = new JComboBox<>(options);
         selectionD.addActionListener(this);
         gameConfig.add(selectionD);

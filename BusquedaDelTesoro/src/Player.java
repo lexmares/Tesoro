@@ -1,26 +1,39 @@
 import javax.swing.*;
-public class Player {
-    private String nombreJugador;
-    private int idJugador;
-    private int progreso;
-    private PantallaPrincipal pantallaPrincipal;
 
-    public Player(String nombreJugador, int idJugador, PantallaPrincipal pantallaPrincipal) {
+public class Player {
+
+    private String nombreJugador;
+    private ImageIcon iconoJugador;
+    int numeroDeTurnos = 0;
+    private int progreso;
+    public Player(String nombreJugador, String direction, PantallaPrincipal pantallaPrincipal){
         this.nombreJugador = nombreJugador;
-        this.idJugador = idJugador;
-        this.pantallaPrincipal = pantallaPrincipal;
-        this.progreso = 0;
+        iconoJugador = new ImageIcon(direction);
     }
 
     public String getNombreJugador() {
         return nombreJugador;
     }
 
+    public void setNombreJugador(String nombreJugador) {
+        this.nombreJugador = nombreJugador;
+    }
+
+    public ImageIcon getIconoJugador() {
+        return iconoJugador;
+    }
+
+    public void setIconoJugador(ImageIcon iconoJugador) {
+        this.iconoJugador = iconoJugador;
+    }
+
     public int getProgreso() {
         return progreso;
     }
 
-    public void aumentarProgreso() {
-        progreso++;
+    public void setProgreso(int progreso) {
+        this.progreso = progreso;
     }
+
+
 }
